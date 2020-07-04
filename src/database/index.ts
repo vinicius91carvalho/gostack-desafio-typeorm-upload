@@ -6,6 +6,7 @@ export default async (name = 'default'): Promise<Connection> => {
   return createConnection(
     Object.assign(defaultOptions, {
       name,
+      password: 'docker',
       database:
         process.env.NODE_ENV === 'test'
           ? 'gostack_desafio06_tests'

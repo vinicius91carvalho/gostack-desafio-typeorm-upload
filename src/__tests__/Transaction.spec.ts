@@ -13,11 +13,11 @@ let connection: Connection;
 describe('Transaction', () => {
   beforeAll(async () => {
     connection = await createConnection('test-connection');
-    
+
     await connection.query('DROP TABLE IF EXISTS transactions');
     await connection.query('DROP TABLE IF EXISTS categories');
     await connection.query('DROP TABLE IF EXISTS migrations');
-    
+
     await connection.runMigrations();
   });
 
@@ -65,7 +65,7 @@ describe('Transaction', () => {
     });
   });
 
-  it('should be able to create new transaction', async () => {
+  it.only('should be able to create new transaction', async () => {
     const transactionsRepository = getRepository(Transaction);
 
     const response = await request(app).post('/transactions').send({
