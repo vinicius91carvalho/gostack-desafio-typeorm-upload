@@ -65,7 +65,7 @@ describe('Transaction', () => {
     });
   });
 
-  it.only('should be able to create new transaction', async () => {
+  it('should be able to create new transaction', async () => {
     const transactionsRepository = getRepository(Transaction);
 
     const response = await request(app).post('/transactions').send({
