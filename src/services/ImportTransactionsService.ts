@@ -1,9 +1,7 @@
 import path from 'path';
 import fs from 'fs';
-import { getCustomRepository, TransactionRepository } from 'typeorm';
 import uploadConfig from '../config/upload';
 import Transaction from '../models/Transaction';
-import TransactionsRepository from '../repositories/TransactionsRepository';
 import CreateCategoryService from './CreateCategoryService';
 import CreateTransactionService from './CreateTransactionService';
 
@@ -60,24 +58,27 @@ class ImportTransactionsService {
     const createCategory = new CreateCategoryService();
     const createTransaction = new CreateTransactionService();
 
-    const savedTransactions = Promise.all(
-      await transactions.map(async transaction => {
-        const { category: categorySynchronized } = await createCategory.execute(
-          transaction.category,
-        );
+    const savedTransactions: Array<Transaction> = [];
 
-        const { title, value, type } = transaction;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const transaction of transactions) {
+      // eslint-disable-next-line no-await-in-loop
+      const { category: categorySynchronized } = await createCategory.execute(
+        transaction.category,
+      );
 
-        const savedTransaction = await createTransaction.execute({
-          title,
-          value,
-          type,
-          category: categorySynchronized,
-        });
+      const { title, value, type } = transaction;
 
-        return savedTransaction;
-      }),
-    );
+      // eslint-disable-next-line no-await-in-loop
+      const savedTransaction = await createTransaction.execute({
+        title,
+        value,
+        type,
+        category: categorySynchronized,
+      });
+
+      savedTransactions.push(savedTransaction);
+    }
 
     return savedTransactions;
   }

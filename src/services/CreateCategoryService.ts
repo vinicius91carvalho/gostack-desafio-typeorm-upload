@@ -19,7 +19,7 @@ class CreateCategoryService {
       title,
     });
 
-    categoriesRepository.save(category);
+    await categoriesRepository.save(category);
 
     return {
       category,
