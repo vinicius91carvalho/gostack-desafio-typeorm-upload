@@ -24,9 +24,9 @@ class CreateTransactionService {
 
     if (type === 'outcome') {
       const transactions = await transactionsRepository.find();
-      const { income } = transactionsRepository.getBalance(transactions);
+      const { total } = transactionsRepository.getBalance(transactions);
 
-      if (value > income) {
+      if (value > total) {
         throw new AppError('The outcome value is greather than your income');
       }
     }
